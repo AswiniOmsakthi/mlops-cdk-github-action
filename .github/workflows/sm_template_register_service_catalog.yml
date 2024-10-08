@@ -57,4 +57,5 @@ jobs:
         cdk synth
     - name: Infrastructure Deploy of Dev Account
       run: |
-        cdk deploy --all --require-approval never
+        cdk --app ./cdk.out/assembly-dev deploy --all --require-approval never
+
