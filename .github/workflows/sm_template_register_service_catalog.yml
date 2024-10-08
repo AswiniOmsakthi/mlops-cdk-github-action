@@ -1,5 +1,3 @@
-# This workflow will install Python dependencies, AWS account 
-
 name: Sagemaker Project Template Register in Service Catalog
 
 on:
@@ -25,7 +23,6 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     env:
       AWS_REGION: ${{ secrets.AWS_REGION }}
@@ -35,10 +32,8 @@ jobs:
     - name: Configure Dev Account AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-          role-to-assume: ${{secrets.AWS_ACCOUNT_OPENID_IAM_ROLE}}
-          aws-region: ${{secrets.AWS_REGION}}
-          # role-skip-session-tagging: true
-          # role-duration-seconds: 1200
+          role-to-assume: ${{ secrets.AWS_ACCOUNT_OPENID_IAM_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
@@ -51,11 +46,10 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: AWS CDK Bootstrap of Dev Account
       run: |
-        cdk bootstrap aws://${{secrets.AWS_ACCOUNT}}/${{secrets.AWS_REGION}} --cloudformation-execution-policies 'arn:aws:iam::aws:policy/AdministratorAccess'
+        cdk bootstrap aws://${{ secrets.AWS_ACCOUNT }}/${{ secrets.AWS_REGION }} --cloudformation-execution-policies 'arn:aws:iam::aws:policy/AdministratorAccess'
     - name: Synth
       run: |
-        cdk synth
+        cdk synth --app ./path/to/your/cdk/app  # Make sure this path is correct
     - name: Infrastructure Deploy of Dev Account
       run: |
-        cdk --app ./cdk.out/assembly-dev deploy --all --require-approval never
-
+        cdk deploy --app ./path/to/your/cdk/app --all --require-approval never  # Specify the app path correctly
